@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Flow &#8212; Muhsie 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Key Concepts" href="Key concepts.html" />
+    <link rel="prev" title="Architecture" href="architecture.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="flow">
+<h1>Flow<a class="headerlink" href="#flow" title="Permalink to this headline">¶</a></h1>
+<p>The following sequence diagrams will take you through the basic flow of creating a Connection, Issuing a Credential
+and Verifying a Credential.</p>
+<div class="section" id="connection-creation">
+<h2>Connection Creation<a class="headerlink" href="#connection-creation" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/conn.jpg"><img alt="Architecture Diagram Muhsie" class="align-center" src="_images/conn.jpg" style="width: 580.5px; height: 356.5px;" /></a>
+<p>In our product, for obtaining a Connection the prover should have our app installed on their mobile phones and
+a valid username password provided by the Issuer. When prover login, issuer Server will issue JWT token which will
+be stored in prover’s app local storage and from now every request would be made including JWT token in its header.</p>
+<p>Now, prover will request for Connection from the Issuer Server. Issuer Server will asks for Invitation from Issuer Agent.
+Issuer Agent will create a new connection and send the invitation to Issuer Server that would store the connection_id and
+prover_id in its instance of local database for tracking the further requests.</p>
+<p>The Issuer Server will send this invitation to Prover app that will eventually accept the invitation by sending it to Prover Agent which will notify the Prover App through
+the webhook, the connection has been established. On the other hand, the Issuer Agent would also notify the Issuer Server about the
+connection state through webhooks.</p>
+</div>
+<div class="section" id="issue-credential">
+<h2>Issue Credential<a class="headerlink" href="#issue-credential" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/issCred.jpg"><img alt="Architecture Diagram Muhsie" class="align-center" src="_images/issCred.jpg" style="width: 585.5px; height: 416.5px;" /></a>
+<p>Now, comes the most important part of our product. But do not forget about the first step because that is the
+prerequisite for this step otherwise you won’t be able to issue Credential. Why? Because for issuing a Credential a connection is
+required.</p>
+<p>After establishing a connection with Issuer, the Prover would request for a Credential. Issuer server will authenticate the request
+and get prover_id from JWT token. It will then fetch connection_id by prover_id from database that was saved in the previous step.</p>
+<p>The Issuer would request its Agent to send CredentialOffer on connection_id associated with prover_id. Now, the Issuer Agent will send
+CredentialOffer to Prover Agent, in return the Prover Agent will notify Prover App about the CredentialOffer through a webhook. After accepting
+the CredentialOffer, the Issuer agent would be notified and asks for Issuer Server for Credential Data.</p>
+<p>The Issuer Server would get data from database by prover_id and issues a Credential. The Issuer Agent would
+send this Credential to Prover Agent, that will store this Credential in wallet and notifies the Prover through a webhook.</p>
+</div>
+<div class="section" id="verify-credential">
+<h2>Verify Credential<a class="headerlink" href="#verify-credential" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/verCred.jpg"><img alt="Architecture Diagram Muhsie" class="align-center" src="_images/verCred.jpg" style="width: 570.5px; height: 365.5px;" /></a>
+<p>It’s time to Verify Credentials. Let’s explain this with a scenario. Prover wants to apply for a job at Scytale Labs(Verifier) but it’s Credential needs to be verified first.
+Prover scans a QR code to get invitation for Connection and sends this invitation to Agent to create a Connection with Verifier Agent.</p>
+<p>After getting notified by a webhook,
+Prover would request for ProofOffer with prover_id and name of the Issuer who has issued this Credential that needs to be verified. Verifier Server would then asks for
+Issuer DID and schema attributes from Ledger and creates a dynamic ProofRequest based on those schema attributes with a restriction of Issuer DID.</p>
+<p>Verifier sends ProofRequest
+to connected Prover Agent which will notify the Prover. Prover App will generate a Proof based on ProofRequest and asks Prover to select revealed values to Verifier, then sends it to Verifier Agent through Prover Agent.
+Verifier Agent verifies the Proof by calling respective endpoint of its Agent, if verified then sends the revealed values by the Prover to Verifier Server</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Muhsie</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Flow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#connection-creation">Connection Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#issue-credential">Issue Credential</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verify-credential">Verify Credential</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Key concepts.html">Key Concepts</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="architecture.html" title="previous chapter">Architecture</a></li>
+      <li>Next: <a href="Key concepts.html" title="next chapter">Key Concepts</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Scytale labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/flow.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
