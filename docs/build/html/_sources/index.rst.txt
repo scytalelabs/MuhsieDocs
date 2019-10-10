@@ -13,7 +13,7 @@ Welcome to muhsie's documentation!
    intro
    architecture
    flow
-   Key concepts
+   glossary
 
 
 Indices and tables

@@ -63,3 +63,5 @@ Verifier sends ProofRequest
 to connected Prover Agent which will notify the Prover. Prover App will generate a Proof based on ProofRequest and asks Prover to select revealed values to Verifier, then sends it to Verifier Agent through Prover Agent. 
 Verifier Agent verifies the Proof by calling respective endpoint of its Agent, if verified then sends the revealed values by the Prover to Verifier Server
 
+Revocation
+^^^^^^^^^^
