@@ -2,7 +2,7 @@ Introduction
 ============
 Muhsis is a next generation electronic credential management system.
 
-It allows organizations to securely issue electronic credentials to end user devices which can be revoked instantaneously when required.
+It allows organizations to securely issue electronic credentials to end user devices such as mobile phones or even smart cards which can be revoked instantaneously when required.
 
 User finally enjoy true consensual release of their data. No data leaves their device without their explicit consent.
 
