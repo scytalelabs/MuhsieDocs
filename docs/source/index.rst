@@ -15,9 +15,9 @@ Welcome to muhsie's documentation!
    flow
    glossary
 
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`search`
+

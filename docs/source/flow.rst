@@ -65,3 +65,4 @@ Verifier Agent verifies the Proof by calling respective endpoint of its Agent, i
 
 Revocation
 ^^^^^^^^^^
+TBD
